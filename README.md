@@ -3,13 +3,14 @@
 > **Deep dive into the animated history of your codebase.**  
 > 專為 **VS Code** 與 **Antigravity IDE** 打造的 Local-First 動態代碼歷史時光機。
 
-[![Version](https://img.shields.io/badge/version-0.1.1-blue.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-0.1.2-blue.svg)](package.json)
 [![Platform](https://img.shields.io/badge/platform-VS%20Code%20%7C%20Antigravity%20IDE-orange.svg)](#)
 
 ---
 
-### 📝 最新更新 (v0.1.1)
-- 🚀 **搜尋結果精準定位**：點擊搜尋彈窗（Cmd+F / Cmd+Shift+F）中的結果時，畫面自動平滑滾動至該行並突顯高亮（行號與代碼背景發光提示）。
+### 📝 最新更新 (v0.1.2)
+- ⌨️ **搜尋視窗完整鍵盤操作**：搜尋輸入框中直接按 `Enter` 立即跳轉至選中/第一個匹配行；支援方向鍵 `↑` / `↓` 在匹配清單中無縫切換，並自動平滑滾動顯示。
+- 🚀 **搜尋結果精準定位 (v0.1.1)**：點擊搜尋彈窗中的結果時，畫面自動平滑滾動至該行並突顯高亮（行號與代碼背景發光提示）。
 - ⏱️ **時光穿梭關鍵字連動**：Pickaxe 跨歷史搜尋點擊 Commit 跳轉後，自動定位至該關鍵字在該版本的第一個命中行。
 
 ## ✨ 核心特色

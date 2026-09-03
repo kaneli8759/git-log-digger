@@ -50,19 +50,27 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
   const [keyword, setKeyword] = useState('');
   const [isSearchingPickaxe, setIsSearchingPickaxe] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   // 當 Modal 開啟時自動選中輸入框
   useEffect(() => {
     if (isSearchModalOpen) {
+      setSelectedIndex(0);
       setTimeout(() => {
         inputRef.current?.focus();
         inputRef.current?.select();
       }, 50);
     } else {
       setKeyword('');
+      setSelectedIndex(0);
     }
   }, [isSearchModalOpen]);
+
+  // 當 keyword 或模式改變時重置選取索引
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [keyword, searchMode]);
 
   // 單一 Commit 代碼內部即時行搜尋
   const singleFileMatches = useMemo(() => {
@@ -94,6 +102,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
     setIsSearchingPickaxe(true);
     setSearchResults([]);
+    setSelectedIndex(0);
     requestPickaxeSearch(trimmed);
   }, [keyword, requestPickaxeSearch, setSearchResults]);
 
@@ -101,31 +110,21 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   useEffect(() => {
     if (searchResults.length > 0) {
       setIsSearchingPickaxe(false);
+      setSelectedIndex(0);
     }
   }, [searchResults]);
 
-  // 處理按鍵事件 (Enter 在 Pickaxe 模式發送搜尋，Esc 關閉)
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      setIsSearchModalOpen(false);
-    } else if (e.key === 'Enter') {
-      if (searchMode === 'pickaxe') {
-        handlePickaxeSearch();
-      }
-    }
-  };
-
   // 點擊單檔搜尋結果跳轉行
-  const handleSelectLineMatch = (lineNumber: number) => {
+  const handleSelectLineMatch = useCallback((lineNumber: number) => {
     jumpToLine(lineNumber, keyword.trim());
     if (onJumpToLine) {
       onJumpToLine(lineNumber);
     }
     setIsSearchModalOpen(false);
-  };
+  }, [jumpToLine, keyword, onJumpToLine, setIsSearchModalOpen]);
 
   // 點擊 Pickaxe 歷史結果，精準穿梭至該 Commit 並自動定位至該關鍵字行
-  const handleJumpToCommit = (commitHash: string) => {
+  const handleJumpToCommit = useCallback((commitHash: string) => {
     const targetIdx = commits.findIndex(
       (c) => c.hash.toLowerCase() === commitHash.toLowerCase()
     );
@@ -138,6 +137,43 @@ export const SearchModal: React.FC<SearchModalProps> = ({
       setIsSearchModalOpen(false);
     } else {
       console.warn(`[Pickaxe Jump]: Commit hash ${commitHash} not found in commits array.`);
+    }
+  }, [commits, goToIndex, keyword, setIsSearchModalOpen, setPendingSearchKeyword]);
+
+  // 處理按鍵事件 (Enter: 跳轉或搜尋, ArrowDown/Up: 切換項目, Esc: 關閉)
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      setIsSearchModalOpen(false);
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (searchMode === 'single' && singleFileMatches.length > 0) {
+        setSelectedIndex((prev) => (prev + 1) % singleFileMatches.length);
+      } else if (searchMode === 'pickaxe' && searchResults.length > 0) {
+        setSelectedIndex((prev) => (prev + 1) % searchResults.length);
+      }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (searchMode === 'single' && singleFileMatches.length > 0) {
+        setSelectedIndex((prev) => (prev - 1 + singleFileMatches.length) % singleFileMatches.length);
+      } else if (searchMode === 'pickaxe' && searchResults.length > 0) {
+        setSelectedIndex((prev) => (prev - 1 + searchResults.length) % searchResults.length);
+      }
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (searchMode === 'single') {
+        if (singleFileMatches.length > 0) {
+          const target = singleFileMatches[selectedIndex] || singleFileMatches[0];
+          if (target) {
+            handleSelectLineMatch(target.lineNumber);
+          }
+        }
+      } else if (searchMode === 'pickaxe') {
+        if (searchResults.length > 0 && selectedIndex >= 0 && selectedIndex < searchResults.length) {
+          handleJumpToCommit(searchResults[selectedIndex].commitHash);
+        } else {
+          handlePickaxeSearch();
+        }
+      }
     }
   };
 
@@ -264,28 +300,46 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                   <div className="px-3 py-1.5 text-[11px] text-neutral-400 font-medium">
                     找到 {singleFileMatches.length} 處匹配結果：
                   </div>
-                  {singleFileMatches.map(({ lineNumber, text, matchIndex }) => {
+                  {singleFileMatches.map(({ lineNumber, text, matchIndex }, idx) => {
                     const before = text.slice(0, matchIndex);
                     const match = text.slice(matchIndex, matchIndex + keyword.length);
                     const after = text.slice(matchIndex + keyword.length);
+                    const isSelected = idx === selectedIndex;
 
                     return (
                       <div
                         key={lineNumber}
+                        ref={(el) => {
+                          if (isSelected && el) {
+                            el.scrollIntoView({ block: 'nearest' });
+                          }
+                        }}
+                        onMouseEnter={() => setSelectedIndex(idx)}
                         onClick={() => handleSelectLineMatch(lineNumber)}
-                        className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[var(--vscode-list-hoverBackground,rgba(255,255,255,0.06))] cursor-pointer group text-xs font-mono transition-colors"
+                        className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer group text-xs font-mono transition-colors ${
+                          isSelected
+                            ? 'bg-[var(--vscode-list-activeSelectionBackground,#094771)] text-white ring-1 ring-[var(--vscode-focusBorder,#007fd4)]'
+                            : 'hover:bg-[var(--vscode-list-hoverBackground,rgba(255,255,255,0.06))]'
+                        }`}
                       >
-                        <span className="w-10 text-right text-neutral-500 flex-shrink-0">
+                        <span className={`w-10 text-right flex-shrink-0 ${isSelected ? 'text-amber-300 font-bold' : 'text-neutral-500'}`}>
                           L{lineNumber}
                         </span>
-                        <div className="flex-1 truncate text-neutral-300 group-hover:text-white">
+                        <div className={`flex-1 truncate ${isSelected ? 'text-white' : 'text-neutral-300 group-hover:text-white'}`}>
                           <span>{before}</span>
-                          <mark className="bg-amber-400/30 text-amber-200 px-0.5 rounded">
+                          <mark className="bg-amber-400/40 text-amber-100 font-semibold px-0.5 rounded">
                             {match}
                           </mark>
                           <span>{after}</span>
                         </div>
-                        <ArrowRight className="w-3.5 h-3.5 text-neutral-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        {isSelected ? (
+                          <span className="text-[10px] font-sans px-1.5 py-0.5 rounded bg-black/40 text-neutral-200 border border-white/20 flex items-center gap-1">
+                            <span>前往</span>
+                            <CornerDownLeft className="w-3 h-3" />
+                          </span>
+                        ) : (
+                          <ArrowRight className="w-3.5 h-3.5 text-neutral-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        )}
                       </div>
                     );
                   })}
@@ -315,15 +369,27 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                 <div className="space-y-2">
                   <div className="px-3 py-1.5 text-[11px] text-neutral-400 font-medium flex items-center justify-between">
                     <span>歷史中共找到 {searchResults.length} 次變更提交：</span>
-                    <span className="text-amber-400/80">點擊任意 Commit 立即穿梭</span>
+                    <span className="text-amber-400/80">上下鍵選擇 / Enter 或點擊立即穿梭</span>
                   </div>
 
-                  {searchResults.map((res: PickaxeSearchResult) => (
-                    <div
-                      key={res.commitHash}
-                      onClick={() => handleJumpToCommit(res.commitHash)}
-                      className="group flex flex-col gap-1.5 p-3 rounded-lg border border-neutral-800 bg-neutral-900/40 hover:bg-[var(--vscode-list-hoverBackground,rgba(255,255,255,0.06))] hover:border-amber-500/40 cursor-pointer transition-all duration-150"
-                    >
+                  {searchResults.map((res: PickaxeSearchResult, idx: number) => {
+                    const isSelected = idx === selectedIndex;
+                    return (
+                      <div
+                        key={res.commitHash}
+                        ref={(el) => {
+                          if (isSelected && el) {
+                            el.scrollIntoView({ block: 'nearest' });
+                          }
+                        }}
+                        onMouseEnter={() => setSelectedIndex(idx)}
+                        onClick={() => handleJumpToCommit(res.commitHash)}
+                        className={`group flex flex-col gap-1.5 p-3 rounded-lg border cursor-pointer transition-all duration-150 ${
+                          isSelected
+                            ? 'border-amber-400 bg-[var(--vscode-list-activeSelectionBackground,#094771)] ring-1 ring-amber-400/80'
+                            : 'border-neutral-800 bg-neutral-900/40 hover:bg-[var(--vscode-list-hoverBackground,rgba(255,255,255,0.06))] hover:border-amber-500/40'
+                        }`}
+                      >
                       {/* Commit 標頭 */}
                       <div className="flex items-center justify-between gap-2 text-xs">
                         <div className="flex items-center gap-2">
@@ -373,8 +439,9 @@ export const SearchModal: React.FC<SearchModalProps> = ({
                           )}
                         </div>
                       )}
-                    </div>
-                  ))}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>
