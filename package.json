@@ -31,8 +31,23 @@
         "command": "git-log-digger.searchHistory",
         "title": "Git Log Digger: Search File History (Pickaxe)",
         "icon": "$(search)"
+      },
+      {
+        "command": "git-log-digger.checkForUpdates",
+        "title": "Git Log Digger: Check for Updates",
+        "icon": "$(cloud-download)"
       }
     ],
+    "configuration": {
+      "title": "Git Log Digger",
+      "properties": {
+        "git-log-digger.updateUrl": {
+          "type": "string",
+          "default": "https://script.google.com/a/macros/mail.chungyo.net/s/AKfycbyjUgrKcVpl0VXlGYhR6n8iB-S1mg27oIlSKu_aGW_5YKusyrhXCbmh2CA-NtzAvfOq/exec",
+          "description": "Google Apps Script 或自訂更新伺服器 API 網址"
+        }
+      }
+    },
     "menus": {
       "editor/title": [
         {
