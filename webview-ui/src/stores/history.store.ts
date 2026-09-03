@@ -23,6 +23,9 @@ export interface HistoryState {
   searchResults: PickaxeSearchResult[];
   isSearchModalOpen: boolean;
   searchMode: 'single' | 'pickaxe';
+  targetLineNumber: number | null;
+  targetKeyword: string;
+  pendingSearchKeyword: string | null;
 
   // 擴充中繼狀態
   filePath: string;
@@ -41,6 +44,9 @@ export interface HistoryState {
   setSpeed: (speed: number) => void;
   setIsAnimating: (isAnimating: boolean) => void;
   fetchCommitContent: (hash: string) => void;
+  jumpToLine: (lineNumber: number, keyword?: string) => void;
+  clearTargetLine: () => void;
+  setPendingSearchKeyword: (keyword: string | null) => void;
 
   // UI 與通訊輔助操作
   toggleDrawer: () => void;
@@ -76,6 +82,9 @@ export const useHistoryStore = create<HistoryState>((set, get) => ({
   searchResults: [],
   isSearchModalOpen: false,
   searchMode: 'single',
+  targetLineNumber: null,
+  targetKeyword: '',
+  pendingSearchKeyword: null,
 
   filePath: '',
   fileName: '',
@@ -85,6 +94,24 @@ export const useHistoryStore = create<HistoryState>((set, get) => ({
   contentCache: {},
 
   // 操作實作
+  jumpToLine: (lineNumber: number, keyword: string = '') => {
+    set({
+      targetLineNumber: lineNumber,
+      targetKeyword: keyword,
+    });
+  },
+
+  clearTargetLine: () => {
+    set({
+      targetLineNumber: null,
+      targetKeyword: '',
+    });
+  },
+
+  setPendingSearchKeyword: (keyword: string | null) => {
+    set({ pendingSearchKeyword: keyword });
+  },
+
   setCommits: (commits: CommitMetadata[]) => {
     set({ commits, currentIndex: 0 });
     if (commits.length > 0) {
@@ -235,7 +262,7 @@ export const useHistoryStore = create<HistoryState>((set, get) => ({
   },
 
   setCommitContent: (hash: string, content: string, diffLines: DiffLine[]) => {
-    const { commits, currentIndex, contentCache } = get();
+    const { commits, currentIndex, contentCache, pendingSearchKeyword } = get();
     const updatedCache = {
       ...contentCache,
       [hash]: { content, diffLines },
@@ -243,11 +270,29 @@ export const useHistoryStore = create<HistoryState>((set, get) => ({
 
     const currentCommit = commits[currentIndex];
     if (currentCommit && currentCommit.hash === hash) {
+      let targetLineNumber = get().targetLineNumber;
+      let targetKeyword = get().targetKeyword;
+      let newPending = pendingSearchKeyword;
+
+      if (pendingSearchKeyword && pendingSearchKeyword.trim()) {
+        const q = pendingSearchKeyword.toLowerCase();
+        const lines = content.split('\n');
+        const matchIndex = lines.findIndex((l) => l.toLowerCase().includes(q));
+        if (matchIndex !== -1) {
+          targetLineNumber = matchIndex + 1;
+          targetKeyword = pendingSearchKeyword;
+          newPending = null;
+        }
+      }
+
       set({
         currentContent: content,
         diffLines,
         contentCache: updatedCache,
         isLoading: false,
+        targetLineNumber,
+        targetKeyword,
+        pendingSearchKeyword: newPending,
       });
     } else {
       set({ contentCache: updatedCache });

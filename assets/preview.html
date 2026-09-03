@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Git Log Digger - Logo Icon Preview & Export</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #131b2e;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border: #1e293b;
+      --primary: #f05032;
+      --cyan: #00e5ff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 40px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #ff7a50, #00e5ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .header p {
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+    .main-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+      max-width: 1080px;
+      width: 100%;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+      align-self: flex-start;
+    }
+    .hero-display {
+      width: 256px;
+      height: 256px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.6));
+    }
+    .hero-display img, .hero-display svg {
+      width: 100%;
+      height: 100%;
+    }
+    .export-btns {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+    }
+    button {
+      flex: 1;
+      background: #1e293b;
+      color: #fff;
+      border: 1px solid #334155;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    button:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+    button.primary {
+      background: #f05032;
+      border-color: #f05032;
+    }
+    button.primary:hover {
+      background: #ff6b4a;
+    }
+    .sizes-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+      width: 100%;
+      padding: 24px 0;
+      background: #0b1120;
+      border-radius: 12px;
+      margin-bottom: 16px;
+    }
+    .size-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .size-item span {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .theme-compare {
+      display: flex;
+      gap: 16px;
+      width: 100%;
+    }
+    .theme-box {
+      flex: 1;
+      padding: 24px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .theme-box.dark {
+      background: #1e1e1e; /* VS Code Default Dark */
+      border: 1px solid #333;
+    }
+    .theme-box.light {
+      background: #ffffff; /* VS Code Default Light */
+      color: #333;
+      border: 1px solid #e2e8f0;
+    }
+    .theme-box span {
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .theme-box.light span {
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Git Log Digger</h1>
+    <p>Official Icon Asset Spec & Preview (Proposal A: The Git Pickaxe)</p>
+  </div>
+
+  <div class="main-grid">
+    <!-- 主展示區 -->
+    <div class="card">
+      <div class="card-title">Master Retina Preview (256×256)</div>
+      <div class="hero-display">
+        <img id="mainIcon" src="icon.svg" alt="Git Log Digger Icon" />
+      </div>
+      <div class="export-btns">
+        <a href="icon.png" download="icon.png" style="text-decoration: none; flex: 1;">
+          <button class="primary" style="width: 100%;">下載 128px PNG (VS Code 規範)</button>
+        </a>
+        <a href="icon-512.png" download="icon-512.png" style="text-decoration: none; flex: 1;">
+          <button style="width: 100%;">下載 512px Retina PNG</button>
+        </a>
+      </div>
+    </div>
+
+    <!-- 各尺寸縮放驗證 -->
+    <div class="card">
+      <div class="card-title">極端尺寸可讀性測試 (Icon Scalability)</div>
+      <div class="sizes-row">
+        <div class="size-item">
+          <img src="icon.svg" width="128" height="128" style="border-radius: 28px;" />
+          <span>128px (Marketplace)</span>
+        </div>
+        <div class="size-item">
+          <img src="icon.svg" width="64" height="64" style="border-radius: 14px;" />
+          <span>64px (Dock)</span>
+        </div>
+        <div class="size-item">
+          <img src="icon.svg" width="32" height="32" style="border-radius: 7px;" />
+          <span>32px (Menu)</span>
+        </div>
+        <div class="size-item">
+          <img src="icon.svg" width="16" height="16" style="border-radius: 3.5px;" />
+          <span>16px (Status)</span>
+        </div>
+      </div>
+
+      <div class="card-title" style="margin-top: 12px;">VS Code 側邊欄深淺色主題對比</div>
+      <div class="theme-compare">
+        <div class="theme-box dark">
+          <img src="icon.svg" width="48" height="48" />
+          <span>Dark Theme</span>
+        </div>
+        <div class="theme-box light">
+          <img src="icon.svg" width="48" height="48" />
+          <span>Light Theme</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

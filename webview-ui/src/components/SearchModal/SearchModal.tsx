@@ -42,6 +42,8 @@ export const SearchModal: React.FC<SearchModalProps> = ({
     goToIndex,
     searchResults,
     setSearchResults,
+    jumpToLine,
+    setPendingSearchKeyword,
   } = useHistoryStore();
 
   const { requestPickaxeSearch } = useVscodeRpc();
@@ -115,19 +117,23 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
   // 點擊單檔搜尋結果跳轉行
   const handleSelectLineMatch = (lineNumber: number) => {
+    jumpToLine(lineNumber, keyword.trim());
     if (onJumpToLine) {
       onJumpToLine(lineNumber);
     }
     setIsSearchModalOpen(false);
   };
 
-  // 點擊 Pickaxe 歷史結果，精準穿梭至該 Commit
+  // 點擊 Pickaxe 歷史結果，精準穿梭至該 Commit 並自動定位至該關鍵字行
   const handleJumpToCommit = (commitHash: string) => {
     const targetIdx = commits.findIndex(
       (c) => c.hash.toLowerCase() === commitHash.toLowerCase()
     );
 
     if (targetIdx !== -1) {
+      if (keyword.trim()) {
+        setPendingSearchKeyword(keyword.trim());
+      }
       goToIndex(targetIdx);
       setIsSearchModalOpen(false);
     } else {

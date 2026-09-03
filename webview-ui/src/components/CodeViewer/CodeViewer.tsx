@@ -31,6 +31,8 @@ export const CodeViewer: React.FC<CodeViewerProps> = ({
     isLoading,
     commits,
     currentIndex,
+    targetLineNumber,
+    targetKeyword,
   } = useHistoryStore();
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -39,6 +41,26 @@ export const CodeViewer: React.FC<CodeViewerProps> = ({
   const content = propContent !== undefined ? propContent : storeContent;
   const isAnimating = isAnimatingOverride !== undefined ? isAnimatingOverride : storeAnimating;
   const currentCommit = commits[currentIndex];
+
+  // 當 targetLineNumber 變動時，平滑滾動至該行並置中呈現
+  useEffect(() => {
+    if (targetLineNumber === null || targetLineNumber === undefined) return;
+
+    const timer = setTimeout(() => {
+      const container = scrollContainerRef.current;
+      if (!container) return;
+
+      const lineEl = container.querySelector(
+        `[data-line-number="${targetLineNumber}"]`
+      ) as HTMLElement | null;
+
+      if (lineEl) {
+        lineEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 60);
+
+    return () => clearTimeout(timer);
+  }, [targetLineNumber, content, isAnimating, viewMode]);
 
   // 根據 viewMode 切分 Token
   const tokenizedLines: TokenizedLine[] = useMemo(() => {
@@ -119,17 +141,24 @@ export const CodeViewer: React.FC<CodeViewerProps> = ({
         >
           {/* 左側：行號與差異欄 */}
           <div className="sticky left-0 z-10 shrink-0 h-fit">
-            <Gutter lines={tokenizedLines} />
+            <Gutter lines={tokenizedLines} targetLineNumber={targetLineNumber} />
           </div>
 
           {/* 右側：雙層 DOM 代碼主體 */}
           <div className="flex-1 min-w-0 h-fit">
             {isAnimating ? (
               // 動畫層：彈簧位移與過渡特效
-              <AnimatedTokenLayer lines={tokenizedLines} />
+              <AnimatedTokenLayer
+                lines={tokenizedLines}
+                targetLineNumber={targetLineNumber}
+              />
             ) : (
               // 靜態層：標準連貫 pre/code，保證滑鼠反白與複製 100% 完整無損
-              <StaticNativeLayer lines={tokenizedLines} />
+              <StaticNativeLayer
+                lines={tokenizedLines}
+                targetLineNumber={targetLineNumber}
+                targetKeyword={targetKeyword}
+              />
             )}
           </div>
         </div>

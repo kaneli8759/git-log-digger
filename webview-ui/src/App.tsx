@@ -42,6 +42,7 @@ export const App: React.FC = () => {
     openSearchModal,
     handleHostMessage,
     isLoading,
+    jumpToLine,
   } = useHistoryStore();
 
   const { requestInitData } = useVscodeRpc(handleHostMessage);
@@ -180,7 +181,7 @@ export const App: React.FC = () => {
       </div>
 
       {/* 雙軌搜尋 Modal (Cmd+F / Cmd+Shift+F) */}
-      <SearchModal />
+      <SearchModal onJumpToLine={(lineNumber) => jumpToLine(lineNumber)} />
     </div>
   );
 };

@@ -8,6 +8,7 @@ import {
 interface AnimatedTokenLayerProps {
   lines: TokenizedLine[];
   lineHeight?: number;
+  targetLineNumber?: number | null;
 }
 
 /**
@@ -18,6 +19,7 @@ interface AnimatedTokenLayerProps {
 export const AnimatedTokenLayer: React.FC<AnimatedTokenLayerProps> = ({
   lines,
   lineHeight = 22,
+  targetLineNumber,
 }) => {
   return (
     <div
@@ -32,12 +34,18 @@ export const AnimatedTokenLayer: React.FC<AnimatedTokenLayerProps> = ({
       {lines.map((line, idx) => {
         const isAdded = line.diffType === 'add';
         const isDeleted = line.diffType === 'del';
+        const isTarget = targetLineNumber === line.lineNumber;
         const staggerDelay = Math.min(idx * 6, 180);
 
         return (
           <div
             key={`animated-line-${line.lineNumber}-${idx}`}
-            className="flex items-center px-4 w-full min-w-max whitespace-pre transform transition-all duration-350"
+            id={`animated-code-line-${line.lineNumber}`}
+            data-line-number={line.lineNumber}
+            data-diff-type={line.diffType}
+            className={`flex items-center px-4 w-full min-w-max whitespace-pre transform transition-all duration-350 ${
+              isTarget ? 'ring-1 ring-amber-400/80' : ''
+            }`}
             style={{
               height: `${lineHeight}px`,
               backgroundColor: getDiffLineBackground(line.diffType),

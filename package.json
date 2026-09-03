@@ -1,14 +1,20 @@
 {
   "name": "git-log-digger",
   "displayName": "Git Log Digger",
+  "publisher": "antigravity",
   "description": "Git Log Digger VS Code extension",
-  "version": "0.1.0",
+  "icon": "assets/icon.png",
+  "version": "0.1.1",
   "engines": {
     "vscode": "^1.85.0"
   },
   "categories": [
     "Other"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/antigravity/git-log-digger.git"
+  },
   "activationEvents": [
     "onCommand:git-log-digger.openHistory",
     "onCommand:git-log-digger.searchHistory"
@@ -58,6 +64,7 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.9.2",
     "esbuild": "^0.20.0",
     "typescript": "^5.3.3"
   }
