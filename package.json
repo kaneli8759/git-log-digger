@@ -1,0 +1,64 @@
+{
+  "name": "git-log-digger",
+  "displayName": "Git Log Digger",
+  "description": "Git Log Digger VS Code extension",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:git-log-digger.openHistory",
+    "onCommand:git-log-digger.searchHistory"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "git-log-digger.openHistory",
+        "title": "Git Log Digger: Open File History",
+        "icon": "$(history)"
+      },
+      {
+        "command": "git-log-digger.searchHistory",
+        "title": "Git Log Digger: Search File History (Pickaxe)",
+        "icon": "$(search)"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "git-log-digger.openHistory",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "git-log-digger.openHistory",
+          "group": "7_modification"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "git-log-digger.openHistory",
+          "group": "7_modification"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "build:extension": "node esbuild.js",
+    "watch:extension": "node esbuild.js --watch",
+    "build:webview": "npm --prefix webview-ui run build",
+    "build": "npm run build:webview && npm run build:extension",
+    "compile": "tsc -p ./ --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "esbuild": "^0.20.0",
+    "typescript": "^5.3.3"
+  }
+}

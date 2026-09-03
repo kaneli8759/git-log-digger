@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   VS Code / Antigravity IDE Native Theme Variables & Resets
+   ========================================================================== */
+
+:root {
+  color-scheme: dark light;
+
+  /* 編輯器背景與前景 */
+  --bg-editor: var(--vscode-editor-background, #1e1e1e);
+  --fg-editor: var(--vscode-editor-foreground, #d4d4d4);
+
+  /* 側邊欄與抽屜 */
+  --bg-sidebar: var(--vscode-sideBar-background, #181818);
+  --fg-sidebar: var(--vscode-sideBar-foreground, #cccccc);
+  --border-sidebar: var(--vscode-sideBar-border, #282828);
+
+  /* 面板與彈窗 Widget */
+  --bg-widget: var(--vscode-editorWidget-background, #252526);
+  --border-widget: var(--vscode-widget-border, #333333);
+
+  /* 按鈕樣式 */
+  --btn-bg: var(--vscode-button-background, #0e639c);
+  --btn-fg: var(--vscode-button-foreground, #ffffff);
+  --btn-hover: var(--vscode-button-hoverBackground, #1177bb);
+  --btn-sec-bg: var(--vscode-button-secondaryBackground, #313131);
+  --btn-sec-fg: var(--vscode-button-secondaryForeground, #ffffff);
+  --btn-sec-hover: var(--vscode-button-secondaryHoverBackground, #3c3c3c);
+
+  /* 聚焦與邊框 */
+  --focus-border: var(--vscode-focusBorder, #007fd4);
+
+  /* Diff 增減色彩 */
+  --diff-add-bg: var(--vscode-diffEditor-insertedTextBackground, rgba(46, 160, 67, 0.18));
+  --diff-del-bg: var(--vscode-diffEditor-removedTextBackground, rgba(248, 81, 73, 0.18));
+  --diff-add-border: var(--vscode-diffEditor-insertedLineBackground, rgba(46, 160, 67, 0.4));
+  --diff-del-border: var(--vscode-diffEditor-removedLineBackground, rgba(248, 81, 73, 0.4));
+
+  /* 編輯器代碼字型 (預設採用 VS Code 設定) */
+  --code-font: var(--vscode-editor-font-family, Menlo, Monaco, 'Courier New', monospace);
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-editor);
+  color: var(--fg-editor);
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 程式碼區域強制允許選取與反白 */
+pre, code, .selectable-code {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  font-family: var(--code-font);
+}
+
+/* ==========================================================================
+   Custom Scrollbar
+   ========================================================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(120, 120, 120, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(120, 120, 120, 0.5);
+}
+
+/* ==========================================================================
+   Range Slider Styling
+   ========================================================================== */
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--focus-border);
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(0, 127, 212, 0.5);
+  transition: transform 0.1s ease-in-out;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
