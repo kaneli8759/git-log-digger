@@ -64,10 +64,16 @@ export class GitLogDiggerPanel {
     }
 
     const fileName = path.basename(normalizedPath);
+    const config = vscode.workspace.getConfiguration('git-log-digger');
+    const openBeside = config.get<boolean>('openBeside', false);
+    const targetColumn = openBeside
+      ? vscode.ViewColumn.Beside
+      : (vscode.window.activeTextEditor?.viewColumn || vscode.ViewColumn.Active);
+
     const panel = vscode.window.createWebviewPanel(
       GitLogDiggerPanel.viewType,
       `Git Log: ${fileName}`,
-      vscode.ViewColumn.Beside,
+      targetColumn,
       {
         enableScripts: true,
         retainContextWhenHidden: true,
@@ -138,11 +144,11 @@ export class GitLogDiggerPanel {
   }
 
   /**
-   * Reveals the webview panel beside the current active editor.
+   * Reveals the webview panel in the current active editor group.
    */
   public reveal(): void {
     if (!this._isDisposed) {
-      this._panel.reveal(vscode.ViewColumn.Beside);
+      this._panel.reveal(this._panel.viewColumn || vscode.ViewColumn.Active);
     }
   }
 

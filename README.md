@@ -3,15 +3,15 @@
 > **Deep dive into the animated history of your codebase.**  
 > 專為 **VS Code** 與 **Antigravity IDE** 打造的 Local-First 動態代碼歷史時光機。
 
-[![Version](https://img.shields.io/badge/version-0.1.2-blue.svg)](package.json)
+[![Version](https://img.shields.io/badge/version-0.1.3-blue.svg)](package.json)
 [![Platform](https://img.shields.io/badge/platform-VS%20Code%20%7C%20Antigravity%20IDE-orange.svg)](#)
 
 ---
 
-### 📝 最新更新 (v0.1.2)
-- ⌨️ **搜尋視窗完整鍵盤操作**：搜尋輸入框中直接按 `Enter` 立即跳轉至選中/第一個匹配行；支援方向鍵 `↑` / `↓` 在匹配清單中無縫切換，並自動平滑滾動顯示。
-- 🚀 **搜尋結果精準定位 (v0.1.1)**：點擊搜尋彈窗中的結果時，畫面自動平滑滾動至該行並突顯高亮（行號與代碼背景發光提示）。
-- ⏱️ **時光穿梭關鍵字連動**：Pickaxe 跨歷史搜尋點擊 Commit 跳轉後，自動定位至該關鍵字在該版本的第一個命中行。
+### 📝 最新更新 (v0.1.3)
+- 🪟 **預設當前分頁開啟（取消強制分割）**：開啟時光機時不再強制分割視窗，直接在當前編輯器分頁群組中開啟；亦可在設定中透過 `git-log-digger.openBeside` 自由切換偏好。
+- ☁️ **Google Drive 自動更新整合**：整合 `UpdaterService`，支援啟動時背景自動檢查更新與一鍵下載升級。
+- ⌨️ **搜尋視窗完整鍵盤操作 (v0.1.2)**：搜尋輸入框中直接按 `Enter` 立即跳轉；支援方向鍵 `↑` / `↓` 平滑切換。
 
 ## ✨ 核心特色
 

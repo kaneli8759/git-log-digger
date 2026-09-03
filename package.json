@@ -4,7 +4,7 @@
   "publisher": "antigravity",
   "description": "Git Log Digger VS Code extension",
   "icon": "assets/icon.png",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -45,6 +45,11 @@
           "type": "string",
           "default": "https://script.google.com/a/macros/mail.chungyo.net/s/AKfycbyjUgrKcVpl0VXlGYhR6n8iB-S1mg27oIlSKu_aGW_5YKusyrhXCbmh2CA-NtzAvfOq/exec",
           "description": "Google Apps Script 或自訂更新伺服器 API 網址"
+        },
+        "git-log-digger.openBeside": {
+          "type": "boolean",
+          "default": false,
+          "description": "是否以分割視窗 (Beside) 呈現時光機，預設為關閉 (在當前分頁中開啟，不分割視窗)"
         }
       }
     },
