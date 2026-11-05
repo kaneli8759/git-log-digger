@@ -90,9 +90,9 @@ export const ControlBar: React.FC<ControlBarProps> = ({ className = '' }) => {
     if (diffLines && diffLines.length > 0) {
       formattedDiffBody = diffLines
         .map((line: DiffLine) => {
-          if (line.type === 'add') return `+ ${line.content}`;
-          if (line.type === 'del') return `- ${line.content}`;
-          return `  ${line.content}`;
+          if (line.type === 'add') return `+${line.content}`;
+          if (line.type === 'del') return `-${line.content}`;
+          return ` ${line.content}`;
         })
         .join('\n');
     } else {

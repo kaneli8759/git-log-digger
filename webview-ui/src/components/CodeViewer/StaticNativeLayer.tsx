@@ -26,8 +26,24 @@ export const StaticNativeLayer: React.FC<StaticNativeLayerProps> = ({
   targetLineNumber,
   targetKeyword,
 }) => {
+  // 攔截原生複製事件：保證純文字乾淨寫入剪貼簿，杜絕富文本 HTML 污染與零寬空格干擾
+  const handleCopy = (e: React.ClipboardEvent<HTMLPreElement>) => {
+    const selection = window.getSelection();
+    if (!selection || selection.isCollapsed) return;
+
+    let text = selection.toString();
+    if (!text) return;
+
+    // 清除用於確保空行在 DOM 選取中維持高度的零寬字符 (U+200B)，避免貼入 Dart/Flutter 專案時造成編譯錯誤
+    text = text.replace(/\u200B/g, '');
+
+    e.clipboardData.setData('text/plain', text);
+    e.preventDefault();
+  };
+
   return (
     <pre
+      onCopy={handleCopy}
       className="static-layer m-0 p-0 w-full min-w-max select-text cursor-text selection:bg-[var(--vscode-editor-selectionBackground,#264f78)] selection:text-[var(--vscode-editor-selectionForeground,inherit)]"
       style={{
         lineHeight: `${lineHeight}px`,
@@ -50,7 +66,7 @@ export const StaticNativeLayer: React.FC<StaticNativeLayerProps> = ({
               id={`code-line-${line.lineNumber}`}
               data-line-number={line.lineNumber}
               data-diff-type={line.diffType}
-              className={`code-line flex items-center px-4 w-full min-w-max whitespace-pre transition-colors duration-200 ${
+              className={`code-line block px-4 w-full min-w-max whitespace-pre transition-colors duration-200 ${
                 isTarget
                   ? 'ring-1 ring-amber-400/80 shadow-sm'
                   : 'hover:bg-[var(--vscode-editor-lineHighlightBackground,rgba(255,255,255,0.03))]'
@@ -80,8 +96,8 @@ export const StaticNativeLayer: React.FC<StaticNativeLayerProps> = ({
                   );
                 })
               ) : (
-                // 處理空行以保證原生連貫選取時能正常抓取空行換行符
-                <span className="inline-block w-0 text-transparent select-none">
+                // 處理空行：不可加 select-none，否則跨行選取時空行會直接丟失；配合 handleCopy 移除 &#8203; 確保貼上純淨換行
+                <span className="inline-block text-transparent">
                   &#8203;
                 </span>
               )}

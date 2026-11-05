@@ -1,16 +1,26 @@
 {
   "name": "git-log-digger",
   "displayName": "Git Log Digger",
-  "publisher": "antigravity",
-  "description": "Git Log Digger VS Code extension",
+  "publisher": "kane-li-dev-6934",
+  "description": "Deep dive into the animated history of your codebase. Local-first dynamic Git timeline & Pickaxe search.",
   "icon": "assets/icon.png",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "engines": {
     "vscode": "^1.85.0"
   },
   "categories": [
+    "SCM Providers",
     "Other"
   ],
+  "keywords": [
+    "git",
+    "history",
+    "log",
+    "timeline",
+    "diff",
+    "pickaxe"
+  ],
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/antigravity/git-log-digger.git"
@@ -79,6 +89,7 @@
     "watch:extension": "node esbuild.js --watch",
     "build:webview": "npm --prefix webview-ui run build",
     "build": "npm run build:webview && npm run build:extension",
+    "package": "npm run build && vsce package --no-git-tag-version",
     "compile": "tsc -p ./ --noEmit"
   },
   "devDependencies": {

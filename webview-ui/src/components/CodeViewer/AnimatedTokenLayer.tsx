@@ -43,7 +43,7 @@ export const AnimatedTokenLayer: React.FC<AnimatedTokenLayerProps> = ({
             id={`animated-code-line-${line.lineNumber}`}
             data-line-number={line.lineNumber}
             data-diff-type={line.diffType}
-            className={`flex items-center px-4 w-full min-w-max whitespace-pre transform transition-all duration-350 ${
+            className={`block px-4 w-full min-w-max whitespace-pre transform transition-all duration-350 ${
               isTarget ? 'ring-1 ring-amber-400/80' : ''
             }`}
             style={{
