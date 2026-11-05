@@ -23,8 +23,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/antigravity/git-log-digger.git"
+    "url": "https://github.com/kaneli8759/git-log-digger.git"
   },
+  "bugs": {
+    "url": "https://github.com/kaneli8759/git-log-digger/issues"
+  },
+  "homepage": "https://github.com/kaneli8759/git-log-digger#readme",
   "activationEvents": [
     "onCommand:git-log-digger.openHistory",
     "onCommand:git-log-digger.searchHistory"
