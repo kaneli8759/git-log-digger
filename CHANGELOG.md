@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.1.6] - 2026-11-05
+
+### 🧹 Removed / 移除
+- **Custom Updater Removal (移除自製更新機制)**:
+  - Removed obsolete custom `updateUrl` configuration and `checkForUpdates` command. The extension now relies entirely on the official VS Code Marketplace native update delivery.  
+    *(移除已不再需要的 `git-log-digger.updateUrl` 設定與 `checkForUpdates` 命令，全面採用 VS Code 市集原生更新管道)*
+
+---
+
 ## [0.1.5] - 2026-11-05
 
 ### 📝 Documentation / 文檔

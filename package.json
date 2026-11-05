@@ -4,7 +4,7 @@
   "publisher": "kane-li-dev-6934",
   "description": "Deep dive into the animated history of your codebase. Local-first dynamic Git timeline & Pickaxe search.",
   "icon": "assets/icon.png",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -45,21 +45,11 @@
         "command": "git-log-digger.searchHistory",
         "title": "Git Log Digger: Search File History (Pickaxe)",
         "icon": "$(search)"
-      },
-      {
-        "command": "git-log-digger.checkForUpdates",
-        "title": "Git Log Digger: Check for Updates",
-        "icon": "$(cloud-download)"
       }
     ],
     "configuration": {
       "title": "Git Log Digger",
       "properties": {
-        "git-log-digger.updateUrl": {
-          "type": "string",
-          "default": "https://script.google.com/a/macros/mail.chungyo.net/s/AKfycbyjUgrKcVpl0VXlGYhR6n8iB-S1mg27oIlSKu_aGW_5YKusyrhXCbmh2CA-NtzAvfOq/exec",
-          "description": "Google Apps Script 或自訂更新伺服器 API 網址"
-        },
         "git-log-digger.openBeside": {
           "type": "boolean",
           "default": false,

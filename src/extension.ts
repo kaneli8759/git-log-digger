@@ -6,7 +6,7 @@
 import * as vscode from 'vscode';
 import { GitLogDiggerContentProvider, GitLogDiggerPanel } from './controllers';
 import { registerOpenHistoryCommand, registerSearchHistoryCommand } from './commands';
-import { gitCacheService, updaterService } from './services';
+import { gitCacheService } from './services';
 
 let statusBarItem: vscode.StatusBarItem | undefined;
 
@@ -27,18 +27,7 @@ export function activate(context: vscode.ExtensionContext): void {
   // 2. Register Commands
   const openHistoryCmd = registerOpenHistoryCommand(context);
   const searchHistoryCmd = registerSearchHistoryCommand(context);
-  const checkUpdatesCmd = vscode.commands.registerCommand(
-    'git-log-digger.checkForUpdates',
-    async () => {
-      await updaterService.checkForUpdates(context, false);
-    }
-  );
-  context.subscriptions.push(openHistoryCmd, searchHistoryCmd, checkUpdatesCmd);
-
-  // 3. Silent auto-update check on startup (delayed 3s)
-  setTimeout(() => {
-    updaterService.checkForUpdates(context, true).catch(() => {});
-  }, 3000);
+  context.subscriptions.push(openHistoryCmd, searchHistoryCmd);
 
   // 3. Create Status Bar Item for quick access
   statusBarItem = vscode.window.createStatusBarItem(
