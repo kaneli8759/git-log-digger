@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- 背景平滑圓角深邃漸層 (Deep Slate Navy) -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="60%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#030712"/>
+    </linearGradient>
+
+    <!-- 鶴嘴鎬雙刃漸層 (Git Red-Orange) -->
+    <linearGradient id="pickHeadGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF7A50"/>
+      <stop offset="50%" stop-color="#F05032"/>
+      <stop offset="100%" stop-color="#C23616"/>
+    </linearGradient>
+
+    <!-- 鎬刃上半部高光立體折射 (Faceted Top Blade) -->
+    <linearGradient id="pickFacetGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFB29D"/>
+      <stop offset="100%" stop-color="#FF7A50"/>
+    </linearGradient>
+
+    <!-- 鎬柄高級鈦合金消光漸層 (Sleek Shaft) -->
+    <linearGradient id="handleGrad" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="40%" stop-color="#CBD5E1"/>
+      <stop offset="100%" stop-color="#64748B"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ==================== 1. 背景容器 (Squircle Container) ==================== -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)"/>
+  <!-- 內緣高光線 (精緻邊框) -->
+  <rect x="2.5" y="2.5" width="507" height="507" rx="109.5" fill="none" stroke="#334155" stroke-width="3" stroke-opacity="0.6"/>
+
+  <!-- ==================== 2. Git 歷史時間樹 (Git History Graph) ==================== -->
+  <g>
+    <!-- 主幹時間軸線 (Main Trunk) -->
+    <line x1="165" y1="74" x2="165" y2="438" stroke="#334155" stroke-width="16" stroke-linecap="round"/>
+    
+    <!-- 主幹頂部節點 -->
+    <circle cx="165" cy="126" r="16" fill="#475569"/>
+    
+    <!-- 分支點 (Branch Point) -->
+    <circle cx="165" cy="206" r="16" fill="#475569"/>
+
+    <!-- 分支延伸線 (Branching Out) -->
+    <path d="M 165 206 C 165 282, 296 260, 296 324 L 296 438" 
+          fill="none" stroke="#334155" stroke-width="16" stroke-linecap="round"/>
+    <!-- 分支上的 Commit 節點 -->
+    <circle cx="296" cy="386" r="16" fill="#475569"/>
+
+    <!-- 主幹底部節點 -->
+    <circle cx="165" cy="414" r="16" fill="#475569"/>
+
+    <!-- 裝飾微型代碼深度刻度 (Code Strata Marks) -->
+    <line x1="112" y1="126" x2="134" y2="126" stroke="#334155" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
+    <line x1="112" y1="206" x2="134" y2="206" stroke="#334155" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
+    <line x1="112" y1="312" x2="134" y2="312" stroke="#334155" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
+    <line x1="112" y1="414" x2="134" y2="414" stroke="#334155" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
+  </g>
+
+  <!-- ==================== 3. 實體純向量陰影 (Pure Vector Shadow) ==================== -->
+  <g opacity="0.45" transform="translate(0, 14)">
+    <!-- 鎬柄陰影 -->
+    <line x1="406" y1="114" x2="252" y2="246" stroke="#000000" stroke-width="24" stroke-linecap="round"/>
+    <!-- 鎬頭陰影 -->
+    <path d="M 182 142 C 224 178 258 206 268 246 C 248 276 210 300 166 312 C 188 288 222 264 228 246 C 228 214 204 178 182 142 Z" fill="#000000"/>
+  </g>
+
+  <!-- ==================== 4. 鶴嘴鎬本體 (The Git Pickaxe) ==================== -->
+  <!-- 鎬柄 (Shaft) - 45° 俯衝延伸 -->
+  <line x1="406" y1="114" x2="252" y2="246" stroke="url(#handleGrad)" stroke-width="22" stroke-linecap="round"/>
+  
+  <!-- 鎬柄頂部安全防滑帽 (Grip Cap) -->
+  <line x1="394" y1="102" x2="418" y2="126" stroke="#F05032" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- 鶴嘴鎬頭厚實雙翼主體 (Bold Curved Pickaxe Blade) -->
+  <!-- 上刃角 (182, 142) -> 軸環 (254, 246) -> 衝擊鑿尖 (166, 308) -->
+  <path d="M 182 142 
+           C 226 182 262 212 272 246 
+           C 250 278 212 300 166 308 
+           C 188 284 220 262 230 246 
+           C 228 216 202 180 182 142 Z" 
+        fill="url(#pickHeadGrad)"/>
+
+  <!-- 鎬頭上半背脊立體光折射面 (Faceted Top Ridge Highlight) -->
+  <path d="M 182 142 
+           C 226 182 262 212 272 246 
+           L 246 246 
+           C 228 216 202 180 182 142 Z" 
+        fill="url(#pickFacetGrad)"/>
+
+  <!-- 鎬頭固定軸環 (Collar Mount) -->
+  <circle cx="252" cy="246" r="16" fill="#0F172A" stroke="#FF7A50" stroke-width="6"/>
+
+  <!-- ==================== 5. 被鎬尖命中發光的 Commit 節點 (The Dug Node) ==================== -->
+  <!-- 外層青藍多層光暈 (Luminous Aura) -->
+  <circle cx="165" cy="312" r="62" fill="#00E5FF" opacity="0.14"/>
+  <circle cx="165" cy="312" r="40" fill="#00E5FF" opacity="0.30"/>
+  
+  <!-- 能量震盪漣漪 (Shockwave Ring) -->
+  <circle cx="165" cy="312" r="25" fill="none" stroke="#00E5FF" stroke-width="5.5" opacity="0.95"/>
+
+  <!-- 核心高亮節點 (White Impact Core) -->
+  <circle cx="165" cy="312" r="14" fill="#FFFFFF" stroke="#00E5FF" stroke-width="3.5"/>
+
+  <!-- 撞擊飛濺的微光粒子 (Pickaxe Sparks) -->
+  <circle cx="124" cy="272" r="5" fill="#00E5FF"/>
+  <circle cx="118" cy="342" r="4.5" fill="#00E5FF"/>
+  <circle cx="198" cy="354" r="4" fill="#FF7A50"/>
+</svg>

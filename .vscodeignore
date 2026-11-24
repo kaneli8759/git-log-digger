@@ -1,0 +1,10 @@
+.vscode/**
+src/**
+webview-ui/**
+esbuild.js
+tsconfig.json
+package-lock.json
+*.vsix
+**/*.map
+assets/preview.html
+.gitignore

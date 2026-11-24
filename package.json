@@ -1,0 +1,96 @@
+{
+  "name": "git-log-digger",
+  "displayName": "Git Log Digger",
+  "publisher": "kane-li-dev-6934",
+  "description": "Deep dive into the animated history of your codebase. Local-first dynamic Git timeline & Pickaxe search.",
+  "icon": "assets/icon.png",
+  "version": "0.1.6",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "SCM Providers",
+    "Other"
+  ],
+  "keywords": [
+    "git",
+    "history",
+    "log",
+    "timeline",
+    "diff",
+    "pickaxe"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kaneli8759/git-log-digger.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kaneli8759/git-log-digger/issues"
+  },
+  "homepage": "https://github.com/kaneli8759/git-log-digger#readme",
+  "activationEvents": [
+    "onCommand:git-log-digger.openHistory",
+    "onCommand:git-log-digger.searchHistory"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "git-log-digger.openHistory",
+        "title": "Git Log Digger: Open File History",
+        "icon": "$(history)"
+      },
+      {
+        "command": "git-log-digger.searchHistory",
+        "title": "Git Log Digger: Search File History (Pickaxe)",
+        "icon": "$(search)"
+      }
+    ],
+    "configuration": {
+      "title": "Git Log Digger",
+      "properties": {
+        "git-log-digger.openBeside": {
+          "type": "boolean",
+          "default": false,
+          "description": "是否以分割視窗 (Beside) 呈現時光機，預設為關閉 (在當前分頁中開啟，不分割視窗)"
+        }
+      }
+    },
+    "menus": {
+      "editor/title": [
+        {
+          "command": "git-log-digger.openHistory",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "git-log-digger.openHistory",
+          "group": "7_modification"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "git-log-digger.openHistory",
+          "group": "7_modification"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "build:extension": "node esbuild.js",
+    "watch:extension": "node esbuild.js --watch",
+    "build:webview": "npm --prefix webview-ui run build",
+    "build": "npm run build:webview && npm run build:extension",
+    "package": "npm run build && vsce package --no-git-tag-version",
+    "compile": "tsc -p ./ --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.9.2",
+    "esbuild": "^0.20.0",
+    "typescript": "^5.3.3"
+  }
+}
